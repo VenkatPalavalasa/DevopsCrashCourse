@@ -1,10 +1,7 @@
 ```
 ##################################################
-OTel Metrics with Prometheus and Grafana on Minikube (Ubuntu EC2)
+Minikube (Ubuntu EC2)
 ##################################################
-
-Flow: telemetrygen -> OTel Collector -> Prometheus -> Grafana
-Infra metrics: node-exporter -> Prometheus -> Grafana
 
 ==========================
 1. Update system packages
