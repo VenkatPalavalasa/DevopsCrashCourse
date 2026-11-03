@@ -1,0 +1,94 @@
+What is a Deployment?
+######################
+
+A Kubernetes Deployment manages ReplicaSets and ensures that the desired number of application Pods are running. 
+
+1. Replica Management: Maintains the desired number of Pod replicas.
+2. Rolling Updates: Updates application versions without taking down the entire application.
+3. Rollback: Allows us to revert to a previous application version if an update fails.
+4. Self-healing: If a Pod fails or gets deleted, Kubernetes creates a replacement to maintain the desired replica count.
+
+
+deployment.yaml
+================
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.31
+        ports:
+        - containerPort: 80
+
+
+Update the application version
+==============================
+
+$ kubectl set image deployment/nginx-deployment nginx=nginx:1.27
+
+Rollout Status
+================
+
+$ kubectl rollout status deployment/nginx-deployment
+
+Rollback the deployment
+========================
+
+$ kubectl rollout history deployment/nginx-deployment
+
+$ kubectl rollout undo deployment/nginx-deployment
+
+Delete the deployment
+======================
+
+$ kubectl delete deployment nginx-deployment
+
+
+
+
+
+
+
+
+
+
+
+########
+Service
+########
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+
+  kubectl get deployments
+  kubectl get svc
+  kubectl get replicaset
+  kubectl get pods
+
+
+
+
