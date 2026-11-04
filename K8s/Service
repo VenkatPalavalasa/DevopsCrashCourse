@@ -1,0 +1,80 @@
+#Service
+=======
+
+A Kubernetes Service provides a stable IP address and DNS name to access a group of Pods, even when Pod IP addresses change.
+
+$ kubectl get svc
+
+=====================
+2. Types of Services
+====================
+
+1. ClusterIP Service: 
+
+    Default Service type.
+    Used for internal communication within the Kubernetes cluster.
+    Not directly accessible from outside the cluster.
+
+2. NodePort Service: 
+
+    Exposes an application through a port on each Kubernetes node.
+    Can be accessed externally using Node IP and NodePort, provided network access is configured.
+    Default NodePort range: 30000–32767.
+
+3. Loadbalancer: 
+
+    Exposes an application through a cloud provider load balancer.
+    
+
+======
+LAB :
+======
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website-deployment
+  labels:
+    app: website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: website
+  template:
+    metadata:
+      labels:
+        app: website
+    spec:
+      containers:
+      - name: website
+        image: harshadocker13/mywebsite:4
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: website-service
+spec:
+  selector:
+    app: website
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+
+kubectl apply -f deployment.yaml
+
+Run port forwarding on EC2
+===========================
+
+$ kubectl port-forward service/website-service 8080:80 --address 0.0.0.0
+
+sudo lsof -i :8080
+
+AWS: open the port 8080 in AWS security
+
+Access the Application (Browser:):  
+
+http://EC2-IP:8080
