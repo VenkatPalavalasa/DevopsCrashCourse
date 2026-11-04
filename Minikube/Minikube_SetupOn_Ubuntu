@@ -1,0 +1,55 @@
+```
+##################################################
+Minikube (Ubuntu EC2)
+##################################################
+
+==========================
+1. Update system packages
+==========================
+
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl wget apt-transport-https ca-certificates gnupg lsb-release
+
+==================
+2. Install Docker
+==================
+
+sudo apt install -y docker.io
+docker --version
+
+================================
+3. Configure Docker permissions
+================================
+
+sudo usermod -aG docker $USER
+newgrp docker
+docker ps
+
+================================
+4. Download and Install Minikube
+================================
+
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+rm minikube-linux-amd64
+minikube version
+
+=================
+5. Start Minikube
+=================
+
+minikube start --driver=docker
+minikube status
+
+====================
+6. Configure kubectl
+====================
+
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+kubectl version --client
+
+
+kubectl get nodes
+
+
